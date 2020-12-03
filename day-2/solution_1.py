@@ -1,9 +1,8 @@
 #!/usr/bin/python3
+"""
+🎅 Advent of Code 2020 Day #2 Password Philosophy
+   by Mark F. Brown <mark.brown314@gmail.com>
 
-""" 🎅 Advent of Code 2020 Day #2 Password Philosophy """
-""" by Mark F. Brown <mark.brown314@gmail.com> """
-
-""" 
 Format of the code
 [a]-[b]<space>[letter]:<space>[code ...]
 
@@ -20,29 +19,33 @@ code is the password to be validated
 6. validate that it meets the maximum and minimum requirements
 """
 
-# load puzzle input file
-with open('puzzle-input-1.txt') as file_input:
-    
-    valid_count = 0
+def main():
+    """ validate password """
 
-    for input_data in file_input:
-        # tokenizer
-        items = input_data.split(" ")
+    with open('puzzle_input_1.txt') as file_input:
 
-        min_max = items[0].split("-")
-        low = int(min_max[0])
-        high = int(min_max[1])
+        valid = 0
 
-        letter = items[1].split(":")[0]
-        password = items[2]
+        for input_data in file_input:
+            # tokenizer
+            items = input_data.split(" ")
 
-        count = 0
-        for check in password:
-            if check == letter:
-                count += 1
-        if count < low or count > high:
-            print("password", password, "is invalid count of", letter, "=", count)
-        else:
-            print ("password", password, "is valid")
-            valid_count += 1
-    print("valid passwords counted =", valid_count)
+            low, high = (int(n) for n in items[0].split("-"))
+
+            letter = items[1].split(":")[0]
+            password = items[2]
+
+            count = 0
+
+            for check in password:
+                if check == letter:
+                    count += 1
+            if count < low or count > high:
+                print("password", password, "is invalid count of", letter, "=", count)
+            else:
+                print ("password", password, "is valid")
+                valid += 1
+        print("valid passwords counted =", valid)
+
+if __name__ == "__main__":
+    main()

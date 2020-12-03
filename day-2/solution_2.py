@@ -1,13 +1,13 @@
 #!/usr/bin/python3
 
-""" 🎅 Advent of Code 2020 Day #2 Password Philosophy Part 2 """
-""" by Mark F. Brown <mark.brown314@gmail.com> """
+"""
+🎅 Advent of Code 2020 Day #2 Password Philosophy Part 2
+   by Mark F. Brown <mark.brown314@gmail.com>
 
-""" 
 Format of the code
 [a]-[b]<space>[letter]:<space>[code ...]
 
-a is position #1 
+a is position #1
 b is position #2
 letter is letter checked against password
 code is the password to be validated
@@ -19,31 +19,36 @@ code is the password to be validated
 5. validate that only position #1 or #2 has the letter
 """
 
-# load puzzle input file
-with open('puzzle-input-1.txt') as file_input:
-    
-    valid_count = 0
+def main():
+    """ validate passwords """
 
-    for input_data in file_input:
-        # tokenizer
-        items = input_data.split(" ")
+    with open('puzzle_input_1.txt') as file_input:
 
-        positions = items[0].split("-")
+        valid_count = 0
 
-        letter = items[1].split(":")[0]
-        password = items[2]
+        for input_data in file_input:
+            # tokenizer
+            items = input_data.split(" ")
 
-        count = 0
-  
-        for check_pos in positions:
-            index = int(check_pos) - 1
-            if password[index] == letter:
-                count += 1
+            positions = items[0].split("-")
 
-        if count == 1:
-            print("password", password, "is valid")
-            valid_count += 1
-        else:
-            print("password", password, "is invalid due to letter:", letter, "count:", count)
+            letter = items[1].split(":")[0]
+            password = items[2]
 
-    print("valid passwords counted =", valid_count)
+            count = 0
+
+            for check_pos in positions:
+                index = int(check_pos) - 1
+                if password[index] == letter:
+                    count += 1
+
+            if count == 1:
+                print("password", password, "is valid")
+                valid_count += 1
+            else:
+                print("password", password, "is invalid due to letter:", letter, "count:", count)
+
+        print("valid passwords counted =", valid_count)
+
+if __name__ == "__main__":
+    main()
