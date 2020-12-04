@@ -1,4 +1,5 @@
 #!/usr/bin/python3
+import sys
 import re
 
 def chomp(line):
@@ -51,7 +52,7 @@ def enhanced_fields_validation(fields_map):
             print('height in in. is invalid:', hgt)
             return False
     else:
-        print('height units are invalid:', hgt)
+        print('height format is invalid:', hgt)
         return False
 
     print("hcl:", hcl)
@@ -77,14 +78,14 @@ def validate_fields(fields_map):
     print('union:', req_union)
     print('# fields', len(fields_map.keys()))
     if len(req_union) < len(req_fields):
-        print('missing required diff:', req_union ^ req_fields)
+        print('fields are invalid:', req_union ^ req_fields)
         return False
     
-    """
     eyr = int(fields_map['eyr'])
     iyr = int(fields_map['iyr'])
     byr = int(fields_map['byr'])
 
+    """
     if eyr < 2020:
         print('passport expired:', eyr)
         return False
@@ -104,7 +105,10 @@ def main():
     fields_map = dict()
     valid_passports = 0
     total_passports = 0
-    with open('puzzle_input_1.txt') as file_input:
+    filename = 'puzzle_input_1.txt'
+    if len(sys.argv) > 1:
+        filename = sys.argv[1]
+    with open(filename) as file_input:
         for line in file_input:
             line = chomp(line)
             if line == '':
