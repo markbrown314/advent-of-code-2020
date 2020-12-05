@@ -23,83 +23,60 @@ def enhanced_fields_validation(fields_map):
     ecl = fields_map['ecl']
     pid = fields_map['pid']
     
+    if not re.match('^#[0-9|a-f]{6}$', hcl):
+        #print('hcl invalid')
+        return False
+
     if eyr < 2020 or eyr > 2030:
-        print('passport expiration date invalid:', eyr)
         return False
 
     if iyr < 2010 or iyr > 2020:
-        print('passport issue date invalid:', iyr)
         return False
 
     if byr < 1920 or byr > 2002:
-        print('passport birth year invalid:', byr)
         return False
 
-    print("ecl:", ecl)
     if not re.match('amb|blu|brn|gry|grn|hzl|oth', ecl):
-        print('eye color is invalid:', ecl)
         return False
 
-    print("hgt:", "'{}'".format(hgt))
     if re.match('^[0-9]*cm', hgt):
         hgt = int(hgt.split('cm')[0])
         if hgt < 150 or hgt > 193:
-            print('height in cm. is invalid:', hgt)
             return False
     elif re.match('^[0-9]*in$', hgt):
         hgt = int(hgt.split('in')[0])
         if hgt < 59 or hgt > 76:
-            print('height in in. is invalid:', hgt)
             return False
     else:
-        print('height format is invalid:', hgt)
         return False
 
-    print("hcl:", hcl)
-    if not re.match('^#[0-9|a-f]{6}$', hcl):
-        print('hair color invalid:', hcl)
-        return False
-
-    print('pid:',pid)
     if not re.match('^[0-9]{9}$', pid):
-        print('passport id invalid:', pid)
         return False
+    #print("pidlen:", len(pid), pid)
 
     return True
 
 def validate_fields(fields_map):
-    check_fields = {'byr', 'iyr', 'eyr', 'hgt', 'hcl', 'ecl', 'pid', 'cid'}
-    optional_fields = {'cid'}
-    req_fields = check_fields ^ optional_fields
-    
-    print('fields:', req_fields)
+    check_fields = {'byr', 'iyr', 'eyr', 'hgt', 'hcl', 'ecl', 'pid'}
+    fields = set(list (fields_map.keys()))
 
-    req_union = set(list(fields_map.keys())) & req_fields
-    print('union:', req_union)
-    print('# fields', len(fields_map.keys()))
-    if len(req_union) < len(req_fields):
-        print('fields are invalid:', req_union ^ req_fields)
+    print(check_fields & fields, len(check_fields & fields), len(check_fields))
+
+    if len(check_fields & fields) != len(check_fields):
         return False
     
     eyr = int(fields_map['eyr'])
     iyr = int(fields_map['iyr'])
     byr = int(fields_map['byr'])
 
-    """
-    if eyr < 2020:
-        print('passport expired:', eyr)
-        return False
-
-    if iyr > 2020:
-        print('passport issue date incorrect:', iyr)
-        return False
-
-    if byr > 2020:
-        print('passport birth year incorrect:', byr)
-        return False
-    """
-
     return enhanced_fields_validation(fields_map)
+
+def pretty_print_dict(d):
+   # if 'cid' in d:
+   #     del(d['cid'])
+    for key,value in sorted(d.items(), key=lambda x: x[1]):
+        print("{} : {}".format(key, value), end=" ")
+    print("")
 
 def main():
     fields_map = dict()
@@ -113,24 +90,24 @@ def main():
             line = chomp(line)
             if line == '':
                 total_passports += 1
+
+               # if not validate_fields(fields_map):
+                pretty_print_dict(fields_map)
+
                 if validate_fields(fields_map):
-                    print('ok!\n')
                     fields_map = dict()
                     valid_passports += 1
+                    continue
                 else:
-                    print('fail!\n')
-                continue
+                    fields_map = dict()
+                    continue
 
-            print("'{}'".format(line))
             extract_fields(fields_map, line)
     
     if fields_map:
         total_passports += 1
         if validate_fields(fields_map):
-            print('ok\n')
             valid_passports += 1
-        else:
-            print('fail!\n')
 
     print('valid passports:', valid_passports, 'out of', total_passports)
 
