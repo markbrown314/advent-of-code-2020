@@ -1,33 +1,25 @@
 #!/usr/bin/python3
+"""
+🎅 Advent of Code 2020 Day #6 Binary Boarding Part 1 & 2
+   by Mark F. Brown <mark.brown314@gmail.com>
+"""
 
-def intersection(a, b):
-    return set(a).intersection(b)
+import string
+import sys
 
 def main():
-    groups = [a.replace('\n','') for a in open('puzzle_input_1.txt').read().split('\n\n')]
-    counts = sum([len(set(a)) for a in groups])
+    """ input answers from customs form and output sums """
+    filename = "puzzle_input_1.txt" if len(sys.argv) < 2 else sys.argv[1]
+    # Part 1: Number of questions to which anyone answered "yes"
+    form = [answers.replace('\n','') for answers in open(filename).read().split('\n\n')]
+    counts = sum([len(set(answers)) for answers in form])
     print("sum of counts:", counts)
 
-    groups = [a.split('\n') for a in open('puzzle_input_1.txt').read().split('\n\n')]
-    print(groups)
-    s = 0
-    for a in groups:
-        if len(a) == 1:
-            s+=len(a[0])
-            continue
-        answers = list()
-        for b in a:
-            if b == "":
-                continue
-            build = set()
-            for c in b:
-                build = build.union(set(c))
-            print(build)
-            answers.append(build)
-        print(answers)
-        d = set.intersection(*answers)
-        s += len(d)
-
-    print("sum =", s)
+    # Part 1: Number of questions to which everyone answered "yes"
+    starting_set = set(string.ascii_lowercase)
+    form = [answer.splitlines() for answer in open(filename).read().split('\n\n')]
+    consensus = [set.intersection(*([set(answer) for answer in answers] + [starting_set])) for answers in form]
+    count = sum(len(result) for result in consensus)
+    print("sum =", count)
 if __name__ == "__main__":
     main()
