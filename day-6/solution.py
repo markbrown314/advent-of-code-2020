@@ -15,7 +15,7 @@ def main():
     counts = sum([len(set(answers)) for answers in form])
     print("sum of counts:", counts)
 
-    # Part 1: Number of questions to which everyone answered "yes"
+    # Part 2: Number of questions to which everyone answered "yes"
     identity_set = set(string.ascii_lowercase)
     form = [answer.splitlines() for answer in open(filename).read().split('\n\n')]
     consensus = [set.intersection(*([set(answer) for answer in answers] + [identity_set])) for answers in form]
