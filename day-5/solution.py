@@ -3,18 +3,16 @@
 🎅 Advent of Code 2020 Day #5 Binary Boarding Part 1 & 2
    by Mark F. Brown <mark.brown314@gmail.com>
 """
-import sys
 
 MAX_ROWS = 128
 MAX_COLS = 8
 
-# partition an array in half
-def partition(a):
-    return [list(filter(lambda x: x>(a[len(a)-1]+a[0])//2, a)), 
-            list(filter(lambda x: x<=(a[len(a)-1]+a[0])//2, a))]
+def partition(array):
+    """ partition split array in half """
+    return [array[len(array)//2:], array[:len(array)//2]]
 
-# given direction list find seat id
 def find_seat_id(directions):
+    """ given boarding pass (list of directions) determine seat id """
     rows = [*range(0, MAX_ROWS)]
     cols = [*range(0, MAX_COLS)]
 
@@ -32,18 +30,16 @@ def find_seat_id(directions):
 
     return (rows[0] * MAX_COLS) + cols[0]
 
-
 def main():
-    with open('puzzle_input_1.txt') as file_input:
-        input_data = file_input.readlines()
-
-    seat_ids = [find_seat_id(list(directions)) for directions in input_data]
+    """ given boarding passes find your seat """
+    boarding_passes = open('puzzle_input_1.txt').readlines()
+    seat_ids = [find_seat_id(list(boarding_pass)) for boarding_pass in boarding_passes]
 
     # return highest seat (part 1)
     print("highest seat id:", max(seat_ids))
 
     # find gap in seats to determine my seat (part 2)
-    your_id = set(*[range(min(seat_ids), max(seat_ids) + 1)]) ^ set(seat_ids)        
+    your_id = set(*[range(min(seat_ids), max(seat_ids) + 1)]) ^ set(seat_ids)
     print("your id:", your_id)
 
 if __name__ == "__main__":
