@@ -1,6 +1,6 @@
 #!/usr/bin/python3
 """
-🎅 Advent of Code 2020 Day #6 Binary Boarding Part 1 & 2
+🎅 Advent of Code 2020 Day #6 Custom Customs Part 1 & 2
    by Mark F. Brown <mark.brown314@gmail.com>
 """
 
