@@ -1,53 +1,50 @@
 #!/usr/bin/python3
+"""
+🎅 Advent of Code 2020 Day #5 Binary Boarding Part 1 & 2
+   by Mark F. Brown <mark.brown314@gmail.com>
+"""
 import sys
 
-def main():
-    filename = 'puzzle_input_1.txt'
-    if len(sys.argv) > 1:
-        filename = sys.argv[1]
-    with open(filename) as file_input:
-        ids = []
-        for line in file_input:
-            row_count = 128
-            row_high = 127
-            row = None
-            row_low = 0
-            col_high = 7
-            col_low = 0
-            col = None
-            directions = list(line)
-            for direction in directions:
-                #print("row high:", row_high, "row low:", row_low)
-                #print("col high:", col_high, "col low:", col_low)
-                row_count//=2
-                if direction == 'F':
-                    row_high = row_high - row_count
-                if direction == 'B':
-                    row_low = row_low + row_count
-                if row_high == row_low:
-                    #print("row found:", row_high)
-                    col = row_high
-                    row = row_high
-                    row_high = 127
-                    row_count = 8
-                    continue
-                if direction == 'L':
-                    col_high = col_high - row_count
-                if direction == 'R':
-                    col_low = col_low + row_count
-                if col_high == col_low:
-                    col = col_high
-                    #print("col found:", col_high)
-                    seat_id = (row * 8) + col
-                    ids.append(seat_id)
-                    print("seat ID:", seat_id)
-                    break
+MAX_ROWS = 128
+MAX_COLS = 8
 
-        ids = sorted(ids)
-        print("highest id:", ids[len(ids)-1])
-        print(ids)
-        for i in range(0, len(ids)-1):
-            if ids[i]-ids[i+1] != -1:
-                print("your id:", ids[i]+1)
+# partition an array in half
+def partition(a):
+    return [list(filter(lambda x: x>(a[len(a)-1]+a[0])//2, a)), 
+            list(filter(lambda x: x<=(a[len(a)-1]+a[0])//2, a))]
+
+# given direction list find seat id
+def find_seat_id(directions):
+    rows = [*range(0, MAX_ROWS)]
+    cols = [*range(0, MAX_COLS)]
+
+    for direction in directions:
+        if direction == 'F':
+            rows = partition(rows)[1]
+        elif direction == 'B':
+            rows = partition(rows)[0]
+        elif direction == 'L':
+            cols = partition(cols)[1]
+        elif direction == 'R':
+            cols = partition(cols)[0]
+
+    assert len(rows) == 1 and len(cols) == 1
+
+    return (rows[0] * MAX_COLS) + cols[0]
+
+
+def main():
+    with open('puzzle_input_1.txt') as file_input:
+        input_data = file_input.readlines()
+
+    seat_ids = [find_seat_id(list(directions)) for directions in input_data]
+
+    # return highest seat (part 1)
+    print("highest seat id:", max(seat_ids))
+
+    # find gap in seats to determine my seat (part 2)
+    your_id = set(*[range(min(seat_ids), max(seat_ids) + 1)]) ^ set(seat_ids)        
+    print("your id:", your_id)
+
 if __name__ == "__main__":
     main()
