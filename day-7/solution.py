@@ -4,38 +4,50 @@
 import sys
 import re
 
+def depth(luggage_dict, key):
+    tree = [key]
+    print("key:", key)
+    count = 0
+    while tree:
+        item = tree.pop()
+        print("item", item)
+        count += 1
+        if item not in luggage_dict:
+            continue
+        tree += luggage_dict[item]
+    return count
+
+def search(luggage_dict, key, find):
+    tree = [key]
+    print("key:", key)
+    count = 0
+    while tree:
+        item = tree.pop()
+        print("item", item)
+        if item == find:
+            print("found!")
+            return True
+        if item not in luggage_dict:
+            continue
+        tree += luggage_dict[item]
+    return False
+
 def main():
     filename = "puzzle_test.txt" if len(sys.argv) < 2 else sys.argv[1]
     rules = open(filename).read().splitlines()
     rules = [re.sub("bags|bag|\.| |[0-9]|contain no other ", "", rule) for rule in rules]
-    #print(rules)
 
     luggage_dict = dict()
 
-    uniq = set()
     for rule in rules:
         relations = rule.split('contain')
-        uniq.add(relations[0])
-        #print("key:", relations[0])
+        print("*key:", relations[0])
         if len(relations) > 1:
             members  = relations[1].split(',')
-            #print("members:", members)
-            for member in members:
-                uniq.add(member)
-                luggage_dict.setdefault(member, set()).add(relations[0])
-    print(uniq, len(uniq))
-
-    search = {"shinygold"}
-    count = 1
-
-    while search != set():
-        print(search)
-        key = search.pop()
-        if key in luggage_dict:
-            print(key, "->", luggage_dict[key])
-            count += 1
-            search |= luggage_dict[key]
-    print("count:", count)
+            print("*members:", members)
+            luggage_dict[relations[0]] = members
+    #for key in luggage_dict:
+    print(sum([(search(luggage_dict, key,"shinygold")) for key in luggage_dict]) - 1)
 
 if __name__ == "__main__":
     main()
