@@ -67,23 +67,22 @@ def main():
 
     tree.show()
 
-    # post order traversal
+    # pre order traversal
     stack = [tree.get_node(tree.root)]
     output = []
 
     while stack:
         node = stack.pop()
-        output.append(node.data)
+        for child_node in tree.children(node.identifier):
+            child_node.data *= node.data
+        output.insert(0, node.data)
+        print(node.data, ",", end="")
 
         if tree.children(node.identifier):
-            stack += tree.children(node.identifier)
+            stack += reversed(tree.children(node.identifier))
 
-    #print(tree.get_node(tree.root))
-    #print(tree.children(tree.root))
-
-    while output:
-        data = output.pop()
-        print(data,",", end="")
+    print(output)
+    print(sum(output)-1)
 
 if __name__ == "__main__":
     main()
