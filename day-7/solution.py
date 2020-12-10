@@ -1,11 +1,15 @@
 #!/usr/bin/python3
-""" 🎅 Advent of Code Day 7: Handy Haversacks """
-""" Mark F. Brown <mark.brown314@gmail.com> """
+"""
+🎅 Advent of Code Day 7: Handy Haversacks
+Mark F. Brown <mark.brown314@gmail.com>
+"""
 import sys
 import re
 from treelib import Tree, Node
 
+
 def search_luggage(luggage_dict, key, find):
+    """ search luggage dictionary key for input find """
     stack = [(1, key)]
     while stack:
         item = stack.pop()
@@ -17,16 +21,17 @@ def search_luggage(luggage_dict, key, find):
     return False
 
 def main():
+    """ Solution to Advent of Code Day 7 """
     filename = "puzzle_test.txt" if len(sys.argv) < 2 else sys.argv[1]
     rules = open(filename).read().splitlines()
- 
+
     # parse input file into a dictionary
     # (bag count, bag name)
 
     rules = [re.sub(r"bags|bag|\.| |contain no other ", "", rule) for rule in rules]
 
     luggage_dict = dict()
- 
+
     for rule in rules:
         relations = rule.split('contain')
         if len(relations) > 1:
@@ -87,4 +92,3 @@ def main():
 
 if __name__ == "__main__":
     main()
-
