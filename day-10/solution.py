@@ -25,14 +25,14 @@ def main():
 
     print("part 1: ones:", ones, "threes:", threes, "answer:", ones * threes)
 
-    # model connections as a tree (count roots inorder to determine total paths)
+    # model connections as a tree (count leaves inorder to determine total paths)
     jolts = sorted(file_input, reverse = True)
     # add first and last item
     first_item = jolts[0]
     jolts.insert(0, first_item + 3)
     jolts.append(0)
 
-    # use a dictionary to count roots of tree
+    # use a dictionary to count leaves of tree
     path_dict = {path:0 for path in jolts}
     path_dict[jolts[0]] = 1
 
