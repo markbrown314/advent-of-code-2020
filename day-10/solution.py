@@ -47,7 +47,7 @@ def main():
             total += path_dict[i+3]
         path_dict[i] = total
 
-    print("part 2: distinct arrangement:", path_dict[0])
+    print("part 2: distinct arrangements:", path_dict[0])
 
 if __name__ == "__main__":
     main()
