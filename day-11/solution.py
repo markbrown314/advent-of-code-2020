@@ -1,11 +1,13 @@
 #!/usr/bin/python3
-import sys
-import copy
 """
 🎅 Advent of Code 2020 Day #11 Seating System Part 1
    by Mark F. Brown <mark.brown314@gmail.com>
 """
+import sys
+import copy
+
 def adjacency_check(coord, input_set, match):
+    """ check adjacent coordinates for matching items """
     for y in range(coord[1]-1, coord[1]+2):
         for x in range(coord[0]-1, coord[0]+2):
             if (x,y) == coord:
@@ -16,6 +18,7 @@ def adjacency_check(coord, input_set, match):
                 yield (x,y)
 
 def print_seats(state):
+    """ print state """
     print()
     for y in range(0, state["max_y"]):
         for x in range(0, state["max_x"]):
@@ -28,6 +31,7 @@ def print_seats(state):
         print()
 
 def apply_rules(state):
+    """ apply rules to state """
     new_state = copy.deepcopy(state)
     changed = False
     new_state["occupied_seats"] = set()
@@ -37,9 +41,9 @@ def apply_rules(state):
             if (x,y) in state["floor"]:
                 continue
 
-            # occupied 
+            # occupied
             if (x,y) in state["empty_seats"]:
-                if not len([*adjacency_check((x,y), state["occupied_seats"], True)]):
+                if not [*adjacency_check((x,y), state["occupied_seats"], True)]:
                     changed = True
                     new_state["occupied_seats"].add((x,y))
                 else:
@@ -53,9 +57,9 @@ def apply_rules(state):
                     new_state["occupied_seats"].add((x,y))
 
     if changed:
-        return(new_state)
-    else:
-        return None
+        return new_state
+
+    return None
 
 def main():
     filename="puzzle_input.txt" if len(sys.argv) < 2 else sys.argv
@@ -73,7 +77,7 @@ def main():
             if file_input[y][x] == '.':
                 state["floor"].add((x,y))
             elif file_input[y][x] == 'L':
-                state["empty_seats"].add((x,y)) 
+                state["empty_seats"].add((x,y))
     print("empty seats:", state["empty_seats"])
     print("floor:", state["floor"])
     print([*adjacency_check((0,0), state["empty_seats"], True)])
