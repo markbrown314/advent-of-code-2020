@@ -1,5 +1,5 @@
 #include <iostream>
-#include <map>
+#include <unordered_map>
 
 /*
  * 🎅 Advent of Code 2020 Day #15  Rambunctious Recitation Part 1 & 2
@@ -10,7 +10,7 @@ using namespace std;
 
 int main()
 {
-    map<unsigned long, unsigned long> puzzle_input;
+    unordered_map<unsigned long, unsigned long> puzzle_input;
     puzzle_input[9] = 1;
     puzzle_input[3] = 2;
     puzzle_input[1] = 3;
@@ -49,3 +49,4 @@ int main()
         turn++;
     }
 }
+
