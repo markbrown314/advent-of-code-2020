@@ -8,9 +8,10 @@
 
 using namespace std;
 
+#define MAX_ARRAY 30000000
 int main()
 {
-    unordered_map<unsigned long, unsigned long> puzzle_input;
+    unsigned int *puzzle_input = new unsigned int[MAX_ARRAY] {};
     puzzle_input[9] = 1;
     puzzle_input[3] = 2;
     puzzle_input[1] = 3;
@@ -18,12 +19,12 @@ int main()
     puzzle_input[8] = 5;
     puzzle_input[4] = 6;
 
-    unsigned long turn = puzzle_input.size() + 1;
+    unsigned long turn = 7;
     unsigned long spoken = 4;
 
     while(true)
     {
-        if (puzzle_input.find(spoken) != puzzle_input.end())
+        if (puzzle_input[spoken] != 0)
         {
             unsigned long diff = turn - 1 - puzzle_input[spoken];
             puzzle_input[spoken] = turn - 1;
@@ -40,7 +41,7 @@ int main()
             cout << "part 1: " << spoken << "\n";
         }
 
-        if (turn == 30000000)
+        if (turn == MAX_ARRAY)
         {
             cout << "part 2: " << spoken << "\n";
             break;
